@@ -1,9 +1,11 @@
 package holovm.render;
 
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import org.lwjgl.opengl.GL11;
+
 import holovm.HoloVM;
 import holovm.block.TileEntityVMBase;
 import holovm.network.VMBaseRequest;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -11,8 +13,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
-import org.lwjgl.opengl.GL11;
 
 public class VMBaseRenderer extends TileEntitySpecialRenderer
 {
@@ -70,6 +70,7 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer
 		item.hoverStart = 0.0F;
 		item.setEntityItemStack(stack);
 		GL11.glTranslated(x + 0.5D, y + 0.3D, z + 0.5D);
+		boolean doRotate = Minecraft.getMinecraft().gameSettings.fancyGraphics;
 		switch (direction)
 		{
 			case 0:
@@ -77,45 +78,45 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer
 				break;
 			case 1:
 				GL11.glTranslated(0.0D, -1.0D, 0.0D);
-				GL11.glRotated(-90.0D, 0.0D, 1.0D, 0.0D);
+				if (doRotate) GL11.glRotated(-90.0D, 0.0D, 1.0D, 0.0D);
 				break;
 			case 2:
 				GL11.glTranslated(0.0D, -1.0D, 0.0D);
-				GL11.glRotated(180.0D, 0.0D, 1.0D, 0.0D);
+				if (doRotate) GL11.glRotated(180.0D, 0.0D, 1.0D, 0.0D);
 				break;
 			case 3:
 				GL11.glTranslated(0.0D, -1.0D, 0.0D);
-				GL11.glRotated(90.0D, 0.0D, 1.0D, 0.0D);
+				if (doRotate) GL11.glRotated(90.0D, 0.0D, 1.0D, 0.0D);
 				break;
 			case 4:
 				GL11.glTranslated(0.0D, 1.0D, 0.0D);
 				break;
 			case 5:
 				GL11.glTranslated(0.0D, 1.0D, 0.0D);
-				GL11.glRotated(-90.0D, 0.0D, 1.0D, 0.0D);
+				if (doRotate) GL11.glRotated(-90.0D, 0.0D, 1.0D, 0.0D);
 				break;
 			case 6:
 				GL11.glTranslated(0.0D, 1.0D, 0.0D);
-				GL11.glRotated(180.0D, 0.0D, 1.0D, 0.0D);
+				if (doRotate) GL11.glRotated(180.0D, 0.0D, 1.0D, 0.0D);
 				break;
 			case 7:
 				GL11.glTranslated(0.0D, 1.0D, 0.0D);
-				GL11.glRotated(90.0D, 0.0D, 1.0D, 0.0D);
+				if (doRotate) GL11.glRotated(90.0D, 0.0D, 1.0D, 0.0D);
 				break;
 			case 8:
 				GL11.glTranslated(0.0D, 0.0D, -1.0D);
 				break;
 			case 9:
 				GL11.glTranslated(0.0D, 0.0D, 1.0D);
-				GL11.glRotated(180.0D, 0.0D, 1.0D, 0.0D);
+				if (doRotate) GL11.glRotated(180.0D, 0.0D, 1.0D, 0.0D);
 				break;
 			case 10:
 				GL11.glTranslated(-1.0D, 0.0D, 0.0D);
-				GL11.glRotated(90.0D, 0.0D, 1.0D, 0.0D);
+				if (doRotate) GL11.glRotated(90.0D, 0.0D, 1.0D, 0.0D);
 				break;
 			case 11:
 				GL11.glTranslated(1.0D, 0.0D, 0.0D);
-				GL11.glRotated(-90.0D, 0.0D, 1.0D, 0.0D);
+				if (doRotate) GL11.glRotated(-90.0D, 0.0D, 1.0D, 0.0D);
 		}
 		GL11.glScaled(2.0D, 2.0D, 2.0D);
 		this.renderer.doRender(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
