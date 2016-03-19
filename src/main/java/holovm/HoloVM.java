@@ -23,7 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-@Mod(modid = HoloVM.MODID, name = HoloVM.MODNAME, version = "1.3")
+@Mod(modid = HoloVM.MODID, name = HoloVM.MODNAME, version = "1.4")
 public class HoloVM
 {
 	@Instance(HoloVM.MODID)

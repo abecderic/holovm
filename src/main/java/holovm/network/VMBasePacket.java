@@ -18,9 +18,11 @@ public class VMBasePacket implements IMessage
 	private ItemStack[] stack;
 	private ItemStack camouflage;
 	private byte direction;
-	
-	public VMBasePacket() {}
-	
+
+	public VMBasePacket()
+	{
+	}
+
 	public VMBasePacket(int x, int y, int z, ItemStack[] stack, ItemStack camouflage, byte direction)
 	{
 		this.x = x;
@@ -62,20 +64,23 @@ public class VMBasePacket implements IMessage
 		ByteBufUtils.writeItemStack(buf, camouflage);
 		buf.writeByte(direction);
 	}
-	
+
 	public static class Handler implements IMessageHandler<VMBasePacket, IMessage>
 	{
 		@Override
 		public IMessage onMessage(VMBasePacket msg, MessageContext ctx)
 		{
-			TileEntityVMBase te = (TileEntityVMBase)Minecraft.getMinecraft().theWorld.getTileEntity(msg.x, msg.y, msg.z);
-			for (int i = 0; i < msg.stackLength; i++)
+			TileEntityVMBase te = (TileEntityVMBase) Minecraft.getMinecraft().theWorld.getTileEntity(msg.x, msg.y, msg.z);
+			if (te != null)
 			{
-				te.setInventorySlotContents(i, msg.stack[i]);
+				for (int i = 0; i < msg.stackLength; i++)
+				{
+					te.setInventorySlotContents(i, msg.stack[i]);
+				}
+				te.setInventorySlotContents(-1, msg.camouflage);
+				te.setDirection(msg.direction);
+				Minecraft.getMinecraft().theWorld.markBlockForUpdate(msg.x, msg.y, msg.z);
 			}
-			te.setInventorySlotContents(-1, msg.camouflage);
-			te.setDirection(msg.direction);
-			Minecraft.getMinecraft().theWorld.markBlockForUpdate(msg.x, msg.y, msg.z);
 			return null;
 		}
 	}
