@@ -1,0 +1,4 @@
+tile.holovm:vmbase.name=Projector
+
+holovm.camouflage=Camouflage: %s
+holovm.advanced=Advanced

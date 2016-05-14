@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": { "all": "holovm:blocks/vmbase2" },
+    "model": "holovm:vmbase",
+    "uvlock": true
+  },
+  "variants": {
+    "hasitem": {
+      "true": {
+        "textures": { "all": "holovm:blocks/vmbase" }
+      },
+      "false": {
+
+      }
+    },
+    "adv": {
+      "true": {
+
+      },
+      "false": {
+
+      }
+    }
+  }
+}
