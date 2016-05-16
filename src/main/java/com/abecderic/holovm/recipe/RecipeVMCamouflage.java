@@ -41,7 +41,7 @@ public class RecipeVMCamouflage implements IRecipe
 							/* two other blocks in recipe?! */
                             return false;
                         }
-                        if (block.isOpaqueCube())
+                        if (block.isOpaqueCube(block.getDefaultState()))
                         {
                             camouflage = current;
                         }

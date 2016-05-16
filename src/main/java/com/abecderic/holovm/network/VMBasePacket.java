@@ -4,7 +4,7 @@ import com.abecderic.holovm.block.TileVMBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -74,7 +74,6 @@ public class VMBasePacket implements IMessage
 				}
 				te.setInventorySlotContents(-1, msg.camouflage);
 				te.setDirection(msg.direction);
-				Minecraft.getMinecraft().theWorld.markBlockForUpdate(msg.pos);
 			}
 			return null;
 		}

@@ -8,9 +8,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
@@ -71,6 +71,7 @@ public class TileVMBase extends TileEntity implements IInventory
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack)
     {
+        if (stack != null && stack.stackSize <= 0) return;
         if (slot == -1)
             this.camouflage = stack;
         else if (slot >= 0 && slot < getSizeInventory())
@@ -195,7 +196,7 @@ public class TileVMBase extends TileEntity implements IInventory
     public void sendUpdates()
     {
         if (!worldObj.isRemote)
-            HoloVM.snw.sendToAllAround(new VMBasePacket(pos, stack, camouflage, direction), new NetworkRegistry.TargetPoint(worldObj.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), PACKET_UPDATE_RADIUS));
+            HoloVM.snw.sendToAllAround(new VMBasePacket(pos, stack, camouflage, direction), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), PACKET_UPDATE_RADIUS));
     }
 
     private String getSlotname(int slot)
@@ -216,8 +217,8 @@ public class TileVMBase extends TileEntity implements IInventory
     }
 
     @Override
-    public IChatComponent getDisplayName()
+    public ITextComponent getDisplayName()
     {
-        return new ChatComponentTranslation(blockType.getUnlocalizedName());
+        return new TextComponentTranslation(blockType.getUnlocalizedName());
     }
 }

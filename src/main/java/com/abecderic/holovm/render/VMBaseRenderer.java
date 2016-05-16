@@ -39,7 +39,7 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
         }
         if (state.getValue(BlockVMBase.HASITEM) && stacksNull && camouflage == null)
         {
-            HoloVM.snw.sendToServer(new VMBaseRequest(te.getWorld().provider.getDimensionId(), te.getPos()));
+            HoloVM.snw.sendToServer(new VMBaseRequest(te.getWorld().provider.getDimension(), te.getPos()));
         }
 
         renderVM(te, state, x, y, z);

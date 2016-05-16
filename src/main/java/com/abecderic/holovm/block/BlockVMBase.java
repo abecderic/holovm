@@ -4,7 +4,7 @@ import com.abecderic.holovm.HoloVM;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
@@ -12,9 +12,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -28,6 +30,7 @@ public class BlockVMBase extends BlockContainer
     {
         super(Material.iron);
         setDefaultState(blockState.getBaseState().withProperty(HASITEM, false).withProperty(ADV, false));
+        setRegistryName(HoloVM.VMBASE_KEY);
         setUnlocalizedName(HoloVM.VMBASE_KEY);
         setHardness(2.2F);
         setResistance(5.0F);
@@ -48,13 +51,13 @@ public class BlockVMBase extends BlockContainer
     }
 
     @Override
-    public int getRenderType()
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return -1;
+        return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override
-    public boolean isOpaqueCube()
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
@@ -67,9 +70,9 @@ public class BlockVMBase extends BlockContainer
     }
 
     @Override
-    protected BlockState createBlockState()
+    protected BlockStateContainer createBlockState()
     {
-        return new BlockState(this, HASITEM, ADV);
+        return new BlockStateContainer(this, HASITEM, ADV);
     }
 
     @Override
@@ -111,9 +114,9 @@ public class BlockVMBase extends BlockContainer
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (!worldIn.isRemote)
+        if (!worldIn.isRemote && hand == EnumHand.MAIN_HAND)
         {
             TileVMBase te = (TileVMBase) worldIn.getTileEntity(pos);
             final boolean adv = state.getValue(ADV);
@@ -122,7 +125,7 @@ public class BlockVMBase extends BlockContainer
             if (playerIn.isSneaking())
             {
                 String s = te.getItemString(face);
-                if (s != null) playerIn.addChatMessage(new ChatComponentText(s));
+                if (s != null) playerIn.addChatMessage(new TextComponentString(s));
             }
             else
             {
@@ -132,7 +135,7 @@ public class BlockVMBase extends BlockContainer
                     EntityItem item = new EntityItem(worldIn, playerIn.posX, playerIn.posY + 1, playerIn.posZ, stack);
                     worldIn.spawnEntityInWorld(item);
                 }
-                te.setInventorySlotContents(face, playerIn.getHeldItem());
+                te.setInventorySlotContents(face, playerIn.getHeldItem(EnumHand.MAIN_HAND));
                 if (te.getStackInSlot(face) != null)
                 {
                     worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(HASITEM, true));
@@ -187,7 +190,7 @@ public class BlockVMBase extends BlockContainer
                 }
 
                 te.sendUpdates();
-                if (!playerIn.capabilities.isCreativeMode) playerIn.setCurrentItemOrArmor(0, null);
+                if (!playerIn.capabilities.isCreativeMode) playerIn.setHeldItem(EnumHand.MAIN_HAND, null);
             }
         }
         return true;

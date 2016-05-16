@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = HoloVM.MODID, name = HoloVM.MODNAME, version = "1.8.9-1.0")
+@Mod(modid = HoloVM.MODID, name = HoloVM.MODNAME, version = "1.9-1.0")
 public class HoloVM
 {
     @Mod.Instance(HoloVM.MODID)
@@ -38,7 +38,8 @@ public class HoloVM
     public void preInit(FMLPreInitializationEvent event)
     {
         vmbase = new BlockVMBase();
-        GameRegistry.registerBlock(vmbase, ItemBlockVMBase.class, VMBASE_KEY);
+        GameRegistry.register(vmbase);
+        GameRegistry.register(new ItemBlockVMBase(vmbase).setRegistryName(vmbase.getRegistryName()));
         GameRegistry.registerTileEntity(TileVMBase.class, VMBASE_KEY);
     }
 

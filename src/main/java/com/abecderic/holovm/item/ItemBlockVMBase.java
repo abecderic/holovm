@@ -7,9 +7,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -26,12 +26,12 @@ public class ItemBlockVMBase extends ItemBlock
     {
         if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("advanced"))
         {
-            list.add(StatCollector.translateToLocal("holovm.advanced"));
+            list.add(new TextComponentTranslation("holovm.advanced").getUnformattedText());
         }
         if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("camouflage"))
         {
             ItemStack camouflage = ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("camouflage"));
-            list.add(String.format(StatCollector.translateToLocal("holovm.camouflage"), camouflage.getDisplayName()));
+            list.add(new TextComponentTranslation("holovm.camouflage", camouflage.getDisplayName()).getUnformattedText());
         }
     }
 
