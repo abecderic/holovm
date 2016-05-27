@@ -3,5 +3,5 @@ tile.holovm:vmbase.name=Projector
 holovm.camouflage=Camouflage: %s
 holovm.advanced=Advanced
 holovm.locked=Locked
-holovm.ownedbyyou=§dThis Projector can now only accessed by you.
+holovm.ownedbyyou=§dThis Projector is now locked.
 holovm.notowner=§cThis Projector was locked by %s§c.
