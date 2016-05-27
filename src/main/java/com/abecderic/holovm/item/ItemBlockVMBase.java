@@ -33,6 +33,10 @@ public class ItemBlockVMBase extends ItemBlock
             ItemStack camouflage = ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("camouflage"));
             list.add(new TextComponentTranslation("holovm.camouflage", camouflage.getDisplayName()).getUnformattedText());
         }
+        if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("locked"))
+        {
+            list.add(new TextComponentTranslation("holovm.locked").getUnformattedText());
+        }
     }
 
     @Override
@@ -53,6 +57,15 @@ public class ItemBlockVMBase extends ItemBlock
                     te.setInventorySlotContents(-1, ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("camouflage")));
                     world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockVMBase.HASITEM, true));
                     te.sendUpdates();
+                }
+            }
+            if (stack.getTagCompound().hasKey("locked"))
+            {
+                TileVMBase te = (TileVMBase)world.getTileEntity(pos);
+                if (te != null)
+                {
+                    te.setOwner(player);
+                    player.addChatComponentMessage(new TextComponentTranslation("holovm.ownedbyyou"));
                 }
             }
         }

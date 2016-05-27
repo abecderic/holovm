@@ -7,8 +7,10 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,6 +19,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -86,7 +90,7 @@ public class BlockVMBase extends BlockContainer
     {
         super.onBlockHarvested(worldIn, pos, state, player);
         TileEntity tileentity = worldIn.getTileEntity(pos);
-        if (tileentity != null && tileentity instanceof TileVMBase)
+        if (!worldIn.isRemote && tileentity != null && tileentity instanceof TileVMBase)
         {
             TileVMBase te = (TileVMBase) tileentity;
             for (int i = 0; i < te.getSizeInventory(); i++)
@@ -102,6 +106,16 @@ public class BlockVMBase extends BlockContainer
             if (camouflage != null)
             {
                 EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, camouflage);
+                worldIn.spawnEntityInWorld(item);
+            }
+            if (state.getValue(ADV))
+            {
+                EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(Items.GOLD_INGOT, 4));
+                worldIn.spawnEntityInWorld(item);
+            }
+            if (te.isOwned())
+            {
+                EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(Items.DIAMOND));
                 worldIn.spawnEntityInWorld(item);
             }
         }
@@ -121,7 +135,7 @@ public class BlockVMBase extends BlockContainer
                 String s = te.getItemString(face);
                 if (s != null) playerIn.addChatMessage(new TextComponentString(s));
             }
-            else
+            else if (!te.isOwned() || te.isOwner(playerIn))
             {
                 ItemStack stack = te.getStackInSlot(face);
                 if (stack != null)
@@ -186,8 +200,34 @@ public class BlockVMBase extends BlockContainer
                 te.sendUpdates();
                 if (!playerIn.capabilities.isCreativeMode) playerIn.setHeldItem(EnumHand.MAIN_HAND, null);
             }
+            else
+            {
+                playerIn.addChatComponentMessage(new TextComponentTranslation("holovm.notowner", te.getOwnerName()));
+            }
         }
         return true;
+    }
+
+    @Override
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
+    {
+        TileVMBase te = (TileVMBase) world.getTileEntity(pos);
+        if (!te.isOwned() || te.isOwner(player) || player.isCreative())
+        {
+            return super.removedByPlayer(state, world, pos, player, willHarvest);
+        }
+        return false;
+    }
+
+    @Override
+    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion)
+    {
+        TileVMBase te = (TileVMBase) world.getTileEntity(pos);
+        if (!te.isOwned())
+        {
+            return super.getExplosionResistance(world, pos, exploder, explosion);
+        }
+        return 3600000.0F; // like bedrock
     }
 
     private int playerYawToF3No(float yaw)

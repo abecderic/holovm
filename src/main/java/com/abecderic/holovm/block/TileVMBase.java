@@ -23,6 +23,13 @@ public class TileVMBase extends TileEntity implements IInventory
     private ItemStack camouflage = null;
     private byte direction = -1;
 
+    private static final String OWNER = "owner";
+    private static final String OWNER_UUID_MOST_SIG = "ownerUUIDMostSig";
+    private static final String OWNER_UUID_LEAST_SIG = "ownerUUIDLeastSig";
+    private String owner = null;
+    private long ownerUUIDMostSig;
+    private long ownerUUIDLeastSig;
+
     @Override
     public int getSizeInventory()
     {
@@ -141,6 +148,13 @@ public class TileVMBase extends TileEntity implements IInventory
         NBTTagCompound compoundCamouflage = compound.getCompoundTag("camouflage");
         this.camouflage = ItemStack.loadItemStackFromNBT(compoundCamouflage);
         this.direction = compound.getByte("direction");
+        String owner = compound.getString(OWNER);
+        if (owner != null && !owner.isEmpty())
+        {
+            this.owner = owner;
+            this.ownerUUIDMostSig = compound.getLong(OWNER_UUID_MOST_SIG);
+            this.ownerUUIDLeastSig = compound.getLong(OWNER_UUID_LEAST_SIG);
+        }
     }
 
     @Override
@@ -163,6 +177,12 @@ public class TileVMBase extends TileEntity implements IInventory
             compound.setTag("camouflage", compoundCamouflage);
         }
         compound.setByte("direction", direction);
+        if (this.owner != null)
+        {
+            compound.setString(OWNER, owner);
+            compound.setLong(OWNER_UUID_MOST_SIG, ownerUUIDMostSig);
+            compound.setLong(OWNER_UUID_LEAST_SIG, ownerUUIDLeastSig);
+        }
 
         return compound;
     }
@@ -193,6 +213,38 @@ public class TileVMBase extends TileEntity implements IInventory
     {
         this.direction = direction;
         this.markDirty();
+    }
+
+    public void setOwner(EntityPlayer player)
+    {
+        this.owner = player.getDisplayNameString();
+        this.ownerUUIDMostSig = player.getUniqueID().getMostSignificantBits();
+        this.ownerUUIDLeastSig = player.getUniqueID().getLeastSignificantBits();
+        this.markDirty();
+    }
+
+    public boolean isOwned()
+    {
+        return owner != null;
+    }
+
+    public boolean isOwner(EntityPlayer player)
+    {
+        if (!isOwned()) return false;
+        boolean isOwner = ownerUUIDMostSig == player.getUniqueID().getMostSignificantBits() && ownerUUIDLeastSig == player.getUniqueID().getLeastSignificantBits();
+
+        /* update saved name if neccessary */
+        if (isOwner && !owner.equals(player.getDisplayNameString()))
+        {
+            owner = player.getDisplayNameString();
+        }
+
+        return isOwner;
+    }
+
+    public String getOwnerName()
+    {
+        return owner;
     }
 
     public void sendUpdates()
