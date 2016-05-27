@@ -144,7 +144,7 @@ public class TileVMBase extends TileEntity implements IInventory
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
         for (int i = 0; i < getSizeInventory(); i++)
@@ -163,6 +163,8 @@ public class TileVMBase extends TileEntity implements IInventory
             compound.setTag("camouflage", compoundCamouflage);
         }
         compound.setByte("direction", direction);
+
+        return compound;
     }
 
     @Override

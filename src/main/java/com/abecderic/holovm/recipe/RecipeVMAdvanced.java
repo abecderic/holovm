@@ -40,7 +40,7 @@ public class RecipeVMAdvanced implements IRecipe
                         return false;
                     }
                 }
-                else if (current.getItem() == Items.gold_ingot)
+                else if (current.getItem() == Items.GOLD_INGOT)
                 {
                     goldAmount++;
                 }
@@ -77,7 +77,7 @@ public class RecipeVMAdvanced implements IRecipe
                         return null;
                     }
                 }
-                else if (current.getItem() == Items.gold_ingot)
+                else if (current.getItem() == Items.GOLD_INGOT)
                 {
                     goldAmount++;
                 }

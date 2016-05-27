@@ -27,7 +27,7 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
     {
         ItemStack camouflage = te.getCamouflage();
 
-        IBlockState state = te.getBlockType().getStateFromMeta(te.getBlockMetadata());
+        IBlockState state = getWorld().getBlockState(te.getPos());
         boolean stacksNull = true;
         for (int i = 0; i < te.getSizeInventory(); i++)
         {
@@ -70,6 +70,7 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
         GlStateManager.popMatrix();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
+        RenderHelper.disableStandardItemLighting();
         if (!state.getValue(BlockVMBase.ADV))
         {
             if (tileentity.getStackInSlot(0) != null)
@@ -105,7 +106,7 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
             float f = 0.0078125F;
             GlStateManager.scale(f, f, f);
             GlStateManager.translate(-64.0F, -64.0F, 0.0F);
-            MapData mapdata = Items.filled_map.getMapData(stack, te.getWorld());
+            MapData mapdata = Items.FILLED_MAP.getMapData(stack, te.getWorld());
             GlStateManager.translate(0.0F, 0.0F, -1.0F);
 
             if (mapdata != null)
@@ -127,7 +128,6 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
     {
         GlStateManager.pushMatrix();
 
-        RenderHelper.disableStandardItemLighting();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 

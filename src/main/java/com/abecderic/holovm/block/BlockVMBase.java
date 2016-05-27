@@ -28,7 +28,7 @@ public class BlockVMBase extends BlockContainer
 
     public BlockVMBase()
     {
-        super(Material.iron);
+        super(Material.IRON);
         setDefaultState(blockState.getBaseState().withProperty(HASITEM, false).withProperty(ADV, false));
         setRegistryName(HoloVM.VMBASE_KEY);
         setUnlocalizedName(HoloVM.VMBASE_KEY);
@@ -54,12 +54,6 @@ public class BlockVMBase extends BlockContainer
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.INVISIBLE;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state)
-    {
-        return false;
     }
 
     @Override

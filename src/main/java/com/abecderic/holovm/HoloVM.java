@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = HoloVM.MODID, name = HoloVM.MODNAME, version = "1.9-1.0")
+@Mod(modid = HoloVM.MODID, name = HoloVM.MODNAME, version = "1.9.4-1.0")
 public class HoloVM
 {
     @Mod.Instance(HoloVM.MODID)
@@ -49,7 +49,7 @@ public class HoloVM
         snw = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
         snw.registerMessage(VMBasePacket.Handler.class, VMBasePacket.class, 0, Side.CLIENT);
         snw.registerMessage(VMBaseRequest.Handler.class, VMBaseRequest.class, 1, Side.SERVER);
-        GameRegistry.addShapedRecipe(new ItemStack(vmbase, 1, 0), " g ", "rir", "sss", 'g', Items.glowstone_dust, 'r', Items.redstone, 'i', Items.sign, 's', Blocks.stone);
+        GameRegistry.addShapedRecipe(new ItemStack(vmbase, 1, 0), " g ", "rir", "sss", 'g', Items.GLOWSTONE_DUST, 'r', Items.REDSTONE, 'i', Items.SIGN, 's', Blocks.STONE);
         proxy.init();
     }
 }
