@@ -2,7 +2,9 @@ package com.abecderic.holovm.network;
 
 import com.abecderic.holovm.block.TileVMBase;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.DimensionManager;
@@ -50,6 +52,22 @@ public class VMBaseRequest implements IMessage
 				ItemStack[] stack = ((TileVMBase)te).getStacks();
 				ItemStack camouflage = ((TileVMBase)te).getCamouflage();
 				byte direction = ((TileVMBase)te).getDirection();
+
+                /* handle map data */
+                for (ItemStack s : stack)
+                {
+                    if (s != null && s.getItem().isMap())
+                    {
+                        ItemMap map  = (ItemMap)s.getItem();
+                        Packet<?> packet = map.getMapData(s, DimensionManager.getWorld(msg.dim)).getMapInfo(ctx.getServerHandler().playerEntity).getPacket(s);
+                        System.out.println("stack: " + s + ", packet: " + packet);
+                        if (packet != null)
+                        {
+                            ctx.getServerHandler().sendPacket(packet);
+                        }
+                    }
+                }
+
 				return new VMBasePacket(msg.pos, stack, camouflage, direction);
 			}
 			return null;

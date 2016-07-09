@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Items;
+import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.MapData;
@@ -101,18 +101,17 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
 
         if (stack.getItem() instanceof net.minecraft.item.ItemMap)
         {
+            ItemMap map = (ItemMap)stack.getItem();
             Minecraft.getMinecraft().getRenderManager().renderEngine.bindTexture(MAP_BG);
             GlStateManager.rotate(180.0F, 180.0F, 0.0F, 1.0F);
             float f = 0.0078125F;
             GlStateManager.scale(f, f, f);
             GlStateManager.translate(-64.0F, -64.0F, 0.0F);
-            MapData mapdata = Items.FILLED_MAP.getMapData(stack, te.getWorld());
+            MapData mapdata = map.getMapData(stack, te.getWorld());
             GlStateManager.translate(0.0F, 0.0F, -1.0F);
 
             if (mapdata != null)
             {
-                // boolean = hide player markers on map
-                // TODO make this a config option
                 Minecraft.getMinecraft().entityRenderer.getMapItemRenderer().renderMap(mapdata, true);
             }
         }
