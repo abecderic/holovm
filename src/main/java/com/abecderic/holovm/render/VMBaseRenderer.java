@@ -50,7 +50,7 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
         setupRendering(x, y, z);
 
         int brightness = tileentity.getWorld().getCombinedLight(tileentity.getPos(), 0);
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)(brightness % 0x10000) / 1f, (float)(brightness / 0x10000) / 1f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) (brightness % 0x10000) / 1f, (float) (brightness / 0x10000) / 1f);
 
         GlStateManager.blendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
 
@@ -84,7 +84,7 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
             {
                 if (tileentity.getStackInSlot(i) == null) continue;
                 int direction = 0;
-                if (i >= 2) direction = 6+i;
+                if (i >= 2) direction = 6 + i;
                 else if (i == 0) direction = tileentity.getDirection() & 3;
                 else if (i == 1) direction = 4 + ((tileentity.getDirection() & 12) >> 2);
                 renderItemStack(tileentity, x, y, z, tileentity.getStackInSlot(i), direction);
@@ -97,26 +97,32 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
     private void renderItemStack(TileVMBase te, double x, double y, double z, ItemStack stack, int direction)
     {
         GlStateManager.pushMatrix();
-        translateOnDirection(direction);
 
         if (stack.getItem() instanceof net.minecraft.item.ItemMap)
         {
-            ItemMap map = (ItemMap)stack.getItem();
-            Minecraft.getMinecraft().getRenderManager().renderEngine.bindTexture(MAP_BG);
-            GlStateManager.rotate(180.0F, 180.0F, 0.0F, 1.0F);
-            float f = 0.0078125F;
-            GlStateManager.scale(f, f, f);
-            GlStateManager.translate(-64.0F, -64.0F, 0.0F);
+            ItemMap map = (ItemMap) stack.getItem();
             MapData mapdata = map.getMapData(stack, te.getWorld());
-            GlStateManager.translate(0.0F, 0.0F, -1.0F);
 
             if (mapdata != null)
             {
+                Minecraft.getMinecraft().getRenderManager().renderEngine.bindTexture(MAP_BG);
+                translateOnDirection(direction);
+                if (direction >= 0 && direction <= 4)
+                    GlStateManager.translate(-0.5F - 0.5F * mapdata.scale, 1.5F - mapdata.scale, 0.0F);
+                else if (direction >= 4 && direction < 8)
+                    GlStateManager.translate(-0.5F - 0.5F * mapdata.scale, 0.5F + mapdata.scale, 0.0F);
+                else
+                    GlStateManager.translate(-0.5F - 0.5F * mapdata.scale, 0.5F + (0.5F * mapdata.scale), 0.0F);
+
+                GlStateManager.rotate(180.0F, 180.0F, 0.0F, 1.0F);
+                float f = 0.0078125F * (mapdata.scale + 1);
+                GlStateManager.scale(f, f, f);
                 Minecraft.getMinecraft().entityRenderer.getMapItemRenderer().renderMap(mapdata, true);
             }
         }
         else
         {
+            translateOnDirection(direction);
             Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
             GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         }
