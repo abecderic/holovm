@@ -2,3 +2,6 @@ tile.holovm:vmbase.name=全息投影仪
 
 holovm.camouflage=伪装：%s
 holovm.advanced=高级
+holovm.locked=已锁定
+holovm.ownedbyyou=§d该投影仪已被锁定。
+holovm.notowner=§c该投影仪已被%s锁定§c。
