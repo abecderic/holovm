@@ -60,7 +60,6 @@ public class VMBaseRequest implements IMessage
                     {
                         ItemMap map  = (ItemMap)s.getItem();
                         Packet<?> packet = map.getMapData(s, DimensionManager.getWorld(msg.dim)).getMapInfo(ctx.getServerHandler().playerEntity).getPacket(s);
-                        System.out.println("stack: " + s + ", packet: " + packet);
                         if (packet != null)
                         {
                             ctx.getServerHandler().sendPacket(packet);

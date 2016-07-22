@@ -119,6 +119,8 @@ public class BlockVMBase extends BlockContainer
                 worldIn.spawnEntityInWorld(item);
             }
         }
+        if (tileentity != null)
+            tileentity.invalidate();
     }
 
     @Override
@@ -216,6 +218,7 @@ public class BlockVMBase extends BlockContainer
         {
             return super.removedByPlayer(state, world, pos, player, willHarvest);
         }
+        player.addChatComponentMessage(new TextComponentTranslation("holovm.notowner", te.getOwnerName()));
         return false;
     }
 

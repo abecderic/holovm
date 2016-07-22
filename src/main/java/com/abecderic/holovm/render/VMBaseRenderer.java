@@ -28,6 +28,7 @@ public class VMBaseRenderer extends TileEntitySpecialRenderer<TileVMBase>
         ItemStack camouflage = te.getCamouflage();
 
         IBlockState state = getWorld().getBlockState(te.getPos());
+        if (state.getBlock() != HoloVM.vmbase) return;
         boolean stacksNull = true;
         for (int i = 0; i < te.getSizeInventory(); i++)
         {

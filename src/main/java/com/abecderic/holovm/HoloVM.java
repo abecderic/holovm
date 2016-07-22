@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = HoloVM.MODID, name = HoloVM.MODNAME, version = "1.9.4-1.0")
+@Mod(modid = HoloVM.MODID, name = HoloVM.MODNAME, version = "1.9.4-1.1")
 public class HoloVM
 {
     @Mod.Instance(HoloVM.MODID)
